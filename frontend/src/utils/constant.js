@@ -1,0 +1,30 @@
+export const checkout_url ="https://checkout.razorpay.com/v1/checkout.js"
+
+export const razorpayCallBackUrl  = (txn_id)=>{
+    return `http://localhost:1234/api/v1/amount/payment/${txn_id}`
+}
+
+export const txn_type ={
+    "fix_deposit":{
+        name:"Fix Deposit",
+        "color":"text-purple-400 font-medium",
+        "bg-color":"bg-purple-100",
+        "desc":"a fix amount you add"
+    },
+    "credit":{
+        name:"Credit",
+
+        "color":"text-green-400 font-medium",
+        "desc":"How much money you credit",
+        "bg-color":"bg-green-200",
+    },
+    "debit":{
+        name:"Debit",
+
+        "color":"text-red-400 font-medium",
+        "desc":"How much money you widrawl",
+        "bg-color":"bg-red-100",
+    }
+}
+
+export const ruppes_symbol =`₹`
