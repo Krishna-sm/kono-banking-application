@@ -12,6 +12,7 @@ import { GiFalloutShelter } from 'react-icons/gi';
 import { GrCurrency } from "react-icons/gr";
 import { PiNewspaperClipping } from "react-icons/pi";
 import { GiReceiveMoney } from "react-icons/gi";
+import { IoCardSharp } from "react-icons/io5";
 
 const RootTemplate = ({children}) => {
 
@@ -57,9 +58,10 @@ const CustomMenu = ({link,text,Icon})=>{
         <Sidebar breakPoint='lg' toggled={isToggle} onBackdropClick={()=>dispatch(setIsToggle())}>
   <Menu className='!bg-white !min-h-screen lg:!min-h-[90vh] px-3 py-10'>
       <CustomMenu link={'/'} text={'Home'} Icon={MdDashboard} />
-      <CustomMenu link={'/amount'} text={'Amount'} Icon={GrCurrency} />
+      <CustomMenu link={'/amount'} text={'Account'} Icon={GrCurrency} />
       <CustomMenu link={'/fd-amount'} text={'Fix Deposit'} Icon={GiReceiveMoney} />
       <CustomMenu link={'/transactions'} text={'Transactions'} Icon={PiNewspaperClipping} />
+      <CustomMenu link={'/atm-cards'} text={'ATM Cards'} Icon={IoCardSharp} />
       <CustomMenu link={'/profile'} text={'Profile'} Icon={GiFalloutShelter} />
   
   </Menu>

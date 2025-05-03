@@ -29,7 +29,7 @@ const HomePage=()=>{
     {
       title:"ATM Cards",
       "Icon":<IoCardSharp className="text-6xl text-black" />,
-      "value":`${2}`,
+      "value":`${user?.atms?.length ??0}`,
       link:'/atm-cards'
     }
   ]

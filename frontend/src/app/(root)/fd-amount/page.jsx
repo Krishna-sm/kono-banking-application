@@ -52,7 +52,7 @@ const FDPage = () => {
             <Suspense fallback={<CustomLoader/>}>
             {
                  deposits.length>0&&           deposits.map((cur,i)=>{
-                                return <FDCard  key={i} data={cur} />
+                                return <FDCard  isUpdate={isUpdate} setIsUpdate={setIsUpdate} key={i} data={cur} />
                             })
                         }  
             </Suspense>

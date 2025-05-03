@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import {createContext, useContext, useState, useEffect} from 'react'
 import { useRouter } from "next/navigation";
 
-const mainContext = createContext({user:{},fetchUserProfile(){},LogoutHandler(){}})
+const mainContext = createContext({user:{},fetchUserProfile(){},LogoutHandler(){},fetchATMDetails(){},atm:{}})
 
 export const useMainContext = ()=> useContext(mainContext)
 
@@ -17,6 +17,7 @@ export const MainContextProvider = ({children})=>{
     const [loading,setLoading] = useState(true)
     const router = useRouter()
 
+    const [atm,setAtm] = useState(null)
     // to fetch user profile 
     const fetchUserProfile = async()=>{
 
@@ -40,6 +41,25 @@ export const MainContextProvider = ({children})=>{
         }
     }
 
+
+    const fetchATMDetails = async(id)=>{
+
+        try {
+        
+            const response = await axiosClient.get(`/atm/get/${id}`,{
+                headers:{
+                    'Authorization':'Bearer '+ localStorage.getItem("token")
+                }
+            })
+            const data  = await response.data  
+            setAtm(data)
+
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.msg || error.message)
+        } 
+    }
     const LogoutHandler = ()=>{
         localStorage.removeItem("token")
         setUser(null)
@@ -58,7 +78,7 @@ export const MainContextProvider = ({children})=>{
             </div>
     }
 
-    return <mainContext.Provider value={{user,fetchUserProfile,LogoutHandler}}>
+    return <mainContext.Provider value={{user,fetchUserProfile,LogoutHandler,fetchATMDetails,atm}}>
         {children}
     </mainContext.Provider>
 }

@@ -2,6 +2,11 @@ const { UserModel } = require("../models/User.model")
 const ApiError = require("../utils/ApiError")
 const bcryptjs = require("bcryptjs")
 const JWTService = require("../utils/JwtService")
+const { AccountModel } = require("../models/Account.model")
+const { TransactionModel } = require("../models/Transactions.model")
+const { FixDepositModel } = require("../models/FixDeposit.model")
+const { ATMmodel } = require("../models/ATMCard.model")
+
 
 class AuthService{
     static async loginUser(body){
@@ -41,9 +46,28 @@ class AuthService{
                 name,email,password,ac_type
                })
 
+               const ac=  await AccountModel.create({
+                user:user._id,
+                amount:0,
+                ac_type:ac_type
+            }) 
+
+
+            await TransactionModel.create({
+                    account:ac._id,
+                    amount:0,
+                    type:'credit',
+                    isSuccess:true,
+                    remark:'Account Opening !'
+            })
+
+
+
+        const token = JWTService.generateToken(user._id)
+
                return {
                 msg:"Register Success",
-                "token":"123"
+                "token":token
             }
 
 
@@ -52,10 +76,64 @@ class AuthService{
         const userd = await UserModel.findById(user)
         .select("name email ac_type createdAt -_id")
 
+        const profile_obj ={}
+
+        const account = await  AccountModel.find({user})
+        .select("_id amount")
+
+        if(!account){
+          const ac=  await AccountModel.create({
+                user,
+                amount:0
+            }) 
+
+
+            await TransactionModel.create({
+                    account:ac._id,
+                    amount:0,
+                    type:'credit',
+                    isSuccess:true,
+                    remark:'Account Opening !'
+            })
+
+            profile_obj['account_no'] = [{
+                _id:ac._id,
+                amount:ac.amount
+            }]  
+
+        }
+        profile_obj['account_no'] = account
+        profile_obj['fd_amount'] = 0
+        // profile_obj['amount'] = account.amount
+        // for fd
+
+      const fixDeposits=  await FixDepositModel.find({user,isClaimed:false})
+
+      if(fixDeposits.length>0){
+
+     const fd_amount= await  Promise.resolve(fixDeposits.map((cur,i)=>{
+            return cur.amount
+      }).reduce((pre,cur,i)=>{
+        return pre+cur
+      }))
+
+      
+      profile_obj['fd_amount'] = fd_amount
+
+
+      }
+
+
+      const atms = await ATMmodel.find({user}).select("_id card_type")
+        
+      
+
+
+
         if(!userd){
             throw new ApiError(401,"Profile Not Found")
         }
-        return  userd
+        return  {...userd.toObject(),...profile_obj,atms}
 
     }
 }
