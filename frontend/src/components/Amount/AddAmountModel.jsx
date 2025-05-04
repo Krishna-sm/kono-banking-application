@@ -64,6 +64,8 @@ export default function AddAmountModel({id}) {
           color: "#61dafb",
       },
   };
+
+
  
 
 
@@ -73,6 +75,7 @@ export default function AddAmountModel({id}) {
      
       // resetForm()
     } catch (error) {
+      console.log(error.message)
       toast.error(error.response.data.msg || error.message)
     }finally{
       setLoading(false)
