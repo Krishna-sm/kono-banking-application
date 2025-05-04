@@ -1,7 +1,7 @@
 export const checkout_url ="https://checkout.razorpay.com/v1/checkout.js"
 
 export const razorpayCallBackUrl  = (txn_id)=>{
-    return `${NEXT_PUBLIC_BASE_URI}/amount/payment/${txn_id}`
+    return `${process.env.NEXT_PUBLIC_BASE_URI}/amount/payment/${txn_id}`
 }
 
 export const txn_type ={
