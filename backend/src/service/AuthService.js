@@ -54,6 +54,7 @@ class AuthService{
 
 
             await TransactionModel.create({
+                user:user._id,
                     account:ac._id,
                     amount:0,
                     type:'credit',
@@ -93,7 +94,9 @@ class AuthService{
                     amount:0,
                     type:'credit',
                     isSuccess:true,
-                    remark:'Account Opening !'
+                    remark:'Account Opening !',
+                user:user._id,
+
             })
 
             profile_obj['account_no'] = [{
