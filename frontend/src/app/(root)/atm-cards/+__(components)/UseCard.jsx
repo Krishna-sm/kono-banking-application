@@ -2,15 +2,16 @@
 import CustomAuthButton from '@/components/reuseable/CustomAuthButton';
 import { useMainContext } from '@/context/MainContext'
 import { axiosClient } from '@/utils/AxiosClient'
+import { CARD_TYPE } from '@/utils/constant';
 import { Dialog, Transition } from '@headlessui/react'
 import { ErrorMessage, Form, Formik ,Field} from 'formik'
 import { Fragment, useState } from 'react'
 import { RiCloseLargeLine } from 'react-icons/ri'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
-export default function UseCardModel() {
+export default function UseCardModel({type}) {
   let [isOpen, setIsOpen] = useState(false)
-    const {atm,user} = useMainContext()
+    const {atm,user,fetchUserProfile} = useMainContext()
     const [loading,setLoading]= useState(false)
 
   function closeModal() {
@@ -25,8 +26,11 @@ export default function UseCardModel() {
     amount:0,
     pin:0
   }
+
+  const max_amont=  type=='basic'?CARD_TYPE.basic.max:type=='classic'?CARD_TYPE.classic.max: type=='platinum'?CARD_TYPE.platinum.max: 0
+
   const validationSchema = yup.object({
-    amount:yup.number().required("Amount is Required").min(1,"Aleast Enter 1 rs for  Withdrawal "),
+    amount:yup.number().required("Amount is Required").min(1,"Aleast Enter 1 rs for  Withdrawal ").max(max_amont-1,`Maximum amount should be less than ${max_amont} `),
        pin:yup.string().required("Pin No is Requird").min(4,"Pin No Should be Equal to 4 Digit").max(4,"Equal to 4 Digit")
    
   })
@@ -34,13 +38,16 @@ export default function UseCardModel() {
   const onSubmitHandler = async(values,{resetForm})=>{
     try {
         setLoading(true)
-        const reponse = await axiosClient.post(`/atm/withdrawal/${atm._id}`,values,{
+        const response = await axiosClient.post(`/atm/withdrawal/${atm._id}`,values,{
             headers:{
                 'Authorization':'Bearer '+localStorage.getItem("token")
             }
         })
-        toast.success("amount widthraowl")
+        const data = await response.data
+        toast.success(data.msg)
+        await fetchUserProfile()
         resetForm()
+        closeModal()
     } catch (error) {
         toast.error(error.response.data.msg || error.message)
     }finally{
@@ -125,7 +132,7 @@ export default function UseCardModel() {
                          </div>
         
                               <div className="mb-3">
-                                <CustomAuthButton isLoading={loading}  text={'Add New'} />
+                                <CustomAuthButton isLoading={loading}  text={'Withdrawal Amount'} />
                               </div>
         
         

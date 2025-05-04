@@ -45,13 +45,13 @@ export default function AddAmountModel({id}) {
      
 
      const options = {
-      key: `rzp_test_tY61egXe5cp31W`, // Enter the Key ID generated from the Dashboard
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
       amount: (values.amount*100).toString(),
       currency: 'INR',
-      name: "Kono Bank",
+      name: "CBI Bank",
       description: "Add Money Transaction",
       callback_url: razorpayCallBackUrl(data.txn_id),
-      "image": "https://razorpay.com/docs/build/browser/static/razorpay-docs-light.009264f2.svg",
+      "image": "/logo.svg",
       // image: { logo },
       order_id: data.order_id,
   
@@ -134,6 +134,10 @@ export default function AddAmountModel({id}) {
 
                   </Dialog.Title>
 
+                  <div className="w-full py-3 flex justify-center items-center ">
+                                <img src="/logo.svg" alt="" className='w-1/2 mx-auto' />
+                            </div> 
+
                          <Formik onSubmit={onSubmitHandler} validationSchema={validationSchema} initialValues={initial_state}>
                          {({values,handleSubmit})=>(
                           <form onSubmit={handleSubmit} className=" w-[96%] lg:w-[80%] mx-auto">
@@ -144,7 +148,7 @@ export default function AddAmountModel({id}) {
                          type="text" className='w-full py-2 outline-none border-none  rounded' placeholder='Enter Amount (in inr) '/>
                           </div>
                           <div className="mb-3 flex w-full justify-end">
-                            <button disabled={values.amount<1 ||loading} className="px-5 flex items-center gap-x-2 bg-rose-600 hover:bg-rose-700 text-white py-2 disabled:bg-rose-300 rounded"><span>Pay</span> <SiRazorpay/> </button>
+                            <button disabled={values.amount<1 ||loading} className="px-5 flex items-center gap-x-2 w-full bg-rose-600 hover:bg-rose-700 text-white py-2 disabled:bg-rose-500 justify-center rounded"><span>Pay</span> <SiRazorpay/> </button>
                           </div>
                         </form>
 

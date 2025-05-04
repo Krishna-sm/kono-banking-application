@@ -11,7 +11,9 @@ const ViewATMCard = () => {
 
   if(!atm || !atm.card_no){
     return <>
-    <h1>No ATM</h1>
+          <div className=" w-[96%] rounded py-10 px-10 lg:w-1/2  shadow text-xl">
+             <img src="/noData.png" className='w-full h-full'  alt="no ATM" />
+          </div>
     </>
   }
 
@@ -32,7 +34,7 @@ const ViewATMCard = () => {
       </div>
       <div className='capitalize text-white'>{atm.card_type} Card</div>
     </div>
-    <div className="number">
+    <div className="number text-white">
       <div>{atm.card_no.slice(0,4)}</div>
       <div>{atm.card_no.slice(4,8)}</div>
       <div>{atm.card_no.slice(8,12)}</div>
@@ -49,12 +51,12 @@ const ViewATMCard = () => {
 
       </div>
       <div className="exp">Exp: &nbsp; 
-        <span className="exp-date">{new Date(atm.expiry).getMonth()+1}/{new Date(atm.expiry).getUTCFullYear()}</span>
+        <span className="exp-date">{new Date(atm.expiry).getMonth()+1}/{new Date(atm.expiry).getUTCFullYear().toString().slice(-2)}</span>
       </div>
     </div>
   </div>
   <div className="mb-3 flex justify-center py-3">
-      <UseCardModel />
+      <UseCardModel type={atm.card_type} />
     </div>
 
 </div>

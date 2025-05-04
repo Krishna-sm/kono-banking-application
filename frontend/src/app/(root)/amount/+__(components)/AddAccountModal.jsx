@@ -93,10 +93,12 @@ export default function AddAccountModal() {
                     as="div"
                     className="text-lg font-medium leading-6 text-gray-900 flex justify-between items-center"
                   >
+
               <h3>Open New Account</h3>
                 <button onClick={closeModal} className='text-2xl p-2 bg-rose-50 rounded-full text-rose-600 cursor-pointer'><RxCross1/></button>
 
                   </Dialog.Title>
+              
                   <div className="mt-2">
                     {/* forms */}
 
